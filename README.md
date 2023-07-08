@@ -105,14 +105,11 @@ Pruebas de APIs: [Más información](https://docs.google.com/document/d/1OlWnPU5
 
 [Más información](https://trello.com/b/leNVlqMv/pi)
 
-## 8. Presentaciones realizadas durante el Proyecto Integrador
+## 8. Presentaciones realizadas
 
   * Sprint 1: [Más información](https://docs.google.com/presentation/d/1UY-GxEyMc4BFrQKyJNMEIVdelvt66h6V-jhzjIJu0sI/edit?usp=sharing)
-  
   * Sprint 2: [Más información](https://docs.google.com/presentation/d/1WX1bXPWZInDGLXBjbwgUGeDFqBuTvhAuC4MaKkEhkcY/edit?usp=sharing)
-
   * Sprint 3: [Más información](https://docs.google.com/presentation/d/1VHR1xDjhwyBKwM7eCGQnsXumlo1_gC2WdcKNXASoM3o/edit?usp=sharing)
-
   * Sprint 4: [Más información](https://docs.google.com/presentation/d/1sGANgnPEwxoBY7czWeFhqE8mRi9Oo_jH6DlshecRWQU/edit?usp=sharing)
 
 ## 9. Retrospectivas
