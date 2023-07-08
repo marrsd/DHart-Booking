@@ -1,0 +1,102 @@
+stages:
+  - build
+  - deploy
+
+build_backend:
+  stage: build
+  image: maven:3.8.6-openjdk-18
+  script:
+    - cd backend
+    - echo "Building app..."
+    - mvn clean
+    - mvn install -DskipTests
+    - echo "Finished building the app."
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - backend/target/backend-0.0.1-SNAPSHOT.jar
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - backend/**/*
+
+build_frontend:
+  stage: build
+  image: node:18.16.0
+  script:
+    - echo "Building the app"
+    - cd frontend/pi-digital
+    - ls
+    - npm --force install
+    - CI=false npm run build
+    - echo "Finished building the app."
+    - cd dist
+    - ls
+    - cd ..
+    - pwd
+  artifacts:
+    expire_in: 1 day
+    name: react_build
+    paths:
+      - frontend/pi-digital/dist
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - frontend/pi-digital/**/*
+
+deploy_Backend:
+  stage: deploy
+  needs: [build_backend]
+  image: alpine:3.11
+  before_script:
+    - apk update && apk add openssh-client bash
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - touch ~/.ssh/config
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - ssh-keyscan -H "$DEPLOY_SERVER_IP" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - echo "Deploying started..."
+    - ssh ubuntu@$DEPLOY_SERVER_IP "sudo systemctl stop dhart.service"
+    - scp backend/target/backend-0.0.1-SNAPSHOT.jar ubuntu@$DEPLOY_SERVER_IP:/home/ubuntu/dhart_backend
+    - ssh ubuntu@$DEPLOY_SERVER_IP "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+    - ssh ubuntu@$DEPLOY_SERVER_IP "echo AWS_ACCESS_KEY_ID"
+    - ssh ubuntu@$DEPLOY_SERVER_IP "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+    - ssh ubuntu@$DEPLOY_SERVER_IP "echo AWS_SECRET_ACCESS_KEY"
+    - ssh ubuntu@$DEPLOY_SERVER_IP "sudo systemctl start dhart.service"
+    - echo "Finished deploying the app."
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - backend/**/*
+
+deploy_Frontend:
+  stage: deploy
+  needs: [build_frontend]
+  image: alpine:3.11
+  before_script:
+    - apk update && apk add openssh-client bash
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY"
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - touch ~/.ssh/config
+    - echo "$SSH_PRIVATE_KEY"
+    - echo "$DEPLOY_SERVER_IP_FRONTEND"
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - ssh-keyscan -H "$DEPLOY_SERVER_IP_FRONTEND" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - echo "Deploying frontend started..."
+    - scp -r frontend/pi-digital/dist ubuntu@$DEPLOY_SERVER_IP_FRONTEND:/home/ubuntu/
+    - ssh ubuntu@$DEPLOY_SERVER_IP_FRONTEND "sudo cp -R ./dist/ /var/www/html/"
+    - ssh ubuntu@$DEPLOY_SERVER_IP_FRONTEND "sudo nginx -s reload"
+    - echo "Finished deploying frontend"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - frontend/**/*
