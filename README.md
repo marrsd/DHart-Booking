@@ -2,8 +2,6 @@
 
 DHart es una applicación web desarrollada en equipo bajo metodologías ágiles. Es un proyecto integrador que busca poner en práctica los conocimientos adquiridos en la carrera Certified Tech Developer, tanto en Front-End, Back-End, Base de datos, Testing, Soft Kills y mucho más.
 
-====
-
 ## Índice
 
 * [1. Página principal](#1-página-principal)
@@ -107,7 +105,7 @@ Pruebas de APIs: [Más información](https://docs.google.com/document/d/1OlWnPU5
 
 [Más información](https://trello.com/b/leNVlqMv/pi)
 
-**Presentaciones realizadas durante el Proyecto Integrador**
+## 8. Presentaciones realizadas durante el Proyecto Integrador
 
   * Sprint 1: [Más información](https://docs.google.com/presentation/d/1UY-GxEyMc4BFrQKyJNMEIVdelvt66h6V-jhzjIJu0sI/edit?usp=sharing)
   
@@ -117,7 +115,7 @@ Pruebas de APIs: [Más información](https://docs.google.com/document/d/1OlWnPU5
 
   * Sprint 4: [Más información](https://docs.google.com/presentation/d/1sGANgnPEwxoBY7czWeFhqE8mRi9Oo_jH6DlshecRWQU/edit?usp=sharing)
 
-## 8. Retrospectivas
+## 9. Retrospectivas
 
   * Sprint 1: [Más información](https://metroretro.io/board/LB1CLNAQT6QY)
   * Sprint 2: [Más información](https://metroretro.io/board/LBERDF8H00ID)
